@@ -113,7 +113,7 @@ objects:
               export MONGO_OPLOG_URL="mongodb://${MONGODB_ADMIN_USERNAME}:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE}-0.${MONGODB_SERVICE}-internal.${KUBERNETES_NAMESPACE}.svc.cluster.local:27017,${MONGODB_SERVICE}-1.${MONGODB_SERVICE}-internal.${KUBERNETES_NAMESPACE}.svc.cluster.local:27017,${MONGODB_SERVICE}-2.${MONGODB_SERVICE}-internal.${KUBERNETES_NAMESPACE}.svc.cluster.local:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
               
               # Run Application
-              ./start.sh
+              node main.js
           ports:
           - containerPort: 3000
             protocol: TCP
@@ -155,11 +155,11 @@ parameters:
 - description: Location of the RocketChat Image
   displayName: RocketChat Image
   name: IMAGE_REGISTRY
-  value: cpitman/rocket.chat
+  value: registry.connect.redhat.com/rocketchat/rocketchat
 - description: Name of the RocketChat tag that should be used.
   displayName: RocketChat Tag
   name: IMAGE_TAG
-  value: "release-candidate"
+  value: "0.56.0"
   required: true
 - description: Name of the MongoDB Service.
   displayName: MongoDB Service Name

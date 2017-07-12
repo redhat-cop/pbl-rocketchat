@@ -191,7 +191,6 @@ objects:
               # Uncomment this if using dynamic volume provisioning.
               # https://docs.openshift.org/latest/install_config/persistent_storage/dynamically_provisioning_pvs.html
               # volume.alpha.kubernetes.io/storage-class: anything
-              volume.alpha.kubernetes.io/storage-class: dynamic
           spec:
             # the volume can be mounted as read-write by a single node
             accessModes: [ ReadWriteOnce ]

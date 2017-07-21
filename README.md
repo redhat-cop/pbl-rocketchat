@@ -25,7 +25,7 @@ The RocketChat image is stored in the [Red Hat Container Catalog](https://regist
 Create a new secret called _rhcc_ containing your credentials to the Red Hat Customer Portal
 
 ```
-oc secrets new-dockercfg external-registry \
+oc secrets new-dockercfg rhcc \
     --docker-username=<username> \
     --docker-password=<password> \
     --docker-email=<email> \

@@ -10,14 +10,6 @@ metadata:
   name: rocketchat-mongodb
 objects:
 - apiVersion: v1
-  kind: ImageStream
-  metadata:
-    name: ${APPLICATION_NAME}
-    labels:
-      application: ${APPLICATION_NAME}
-  spec:
-    dockerImageRepository: "${IMAGE_REGISTRY}"
-- apiVersion: v1
   kind: Route
   metadata:
     annotations:
@@ -102,7 +94,7 @@ objects:
               secretKeyRef:
                 key: ${MONGODB_REPLICA_NAME_SECRET_KEY}
                 name: "${MONGODB_SECRET_NAME}"
-          image: "${APPLICATION_NAME}"
+          image: "${ROCKETCHAT_IMAGE_REGISTRY}:${ROCKETCHAT_IMAGE_TAG}"
           name: ${APPLICATION_NAME}
           command: 
             - "/bin/bash"
@@ -113,7 +105,7 @@ objects:
               export MONGO_OPLOG_URL="mongodb://${MONGODB_ADMIN_USERNAME}:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE}-0.${MONGODB_SERVICE}-internal.${KUBERNETES_NAMESPACE}.svc.cluster.local:27017,${MONGODB_SERVICE}-1.${MONGODB_SERVICE}-internal.${KUBERNETES_NAMESPACE}.svc.cluster.local:27017,${MONGODB_SERVICE}-2.${MONGODB_SERVICE}-internal.${KUBERNETES_NAMESPACE}.svc.cluster.local:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
               
               # Run Application
-              ./start.sh
+              node main.js
           ports:
           - containerPort: 3000
             protocol: TCP
@@ -133,14 +125,6 @@ objects:
               memory: ${MEMORY_REQUEST}
     triggers:
     - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${APPLICATION_NAME}
-        from:
-          kind: ImageStreamTag
-          name: ${APPLICATION_NAME}:${IMAGE_TAG}
-      type: ImageChange
   status: {}
 parameters:
 - description: The name assigned to the application.
@@ -154,12 +138,13 @@ parameters:
   required: true
 - description: Location of the RocketChat Image
   displayName: RocketChat Image
-  name: IMAGE_REGISTRY
-  value: cpitman/rocket.chat
+  name: ROCKETCHAT_IMAGE_REGISTRY
+  value: registry.connect.redhat.com/rocketchat/rocketchat
+  required: true
 - description: Name of the RocketChat tag that should be used.
   displayName: RocketChat Tag
-  name: IMAGE_TAG
-  value: "release-candidate"
+  name: ROCKETCHAT_IMAGE_TAG
+  value: "0.56.0-1"
   required: true
 - description: Name of the MongoDB Service.
   displayName: MongoDB Service Name
